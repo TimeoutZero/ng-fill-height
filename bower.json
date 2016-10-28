@@ -1,0 +1,54 @@
+{
+  "name": "ng-fill-height",
+  "description": "Changes height of the element until parent gets a scroll",
+  "authors": [
+    "Carlos Henrique <carloshpds@gmail.com>",
+    "Renato Massi Pereira <renato.massi@gmail.com>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/TimeoutZero/ng-fill-height.git"
+  },
+  "main": [
+    "builds/release/uiLimitTo.js"
+  ],
+  "dependencies": {
+    "angular": "1.4.7"
+  },
+  "devDependencies": {
+    "angular-resource": "1.4.6",
+    "angular-mocks": "1.4.6"
+  },
+  "resolutions": {
+    "angular": "1.4.7",
+    "angular-touch": "1.4.6"
+  },
+  "overrides": {
+  },
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "angular",
+    "ng",
+    "ui",
+    "select",
+    "ui-select",
+    "ng-fill-height",
+    "br",
+    "web-components"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "src",
+    "demo",
+    ".vscode",
+    "test",
+    "tests"
+  ],
+  "license" : "MIT"
+}
