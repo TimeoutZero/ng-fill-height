@@ -48,7 +48,10 @@
     "demo",
     ".vscode",
     "test",
-    "tests"
+    "tests",
+    "gulpfile.json",
+    "karma.conf.js",
+    "package.json"
   ],
   "license" : "MIT"
 }
