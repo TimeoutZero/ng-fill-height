@@ -49,7 +49,7 @@
     ".vscode",
     "test",
     "tests",
-    "gulpfile.json",
+    "gulpfile.js",
     "karma.conf.js",
     "package.json"
   ],
