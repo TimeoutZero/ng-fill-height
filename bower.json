@@ -10,7 +10,7 @@
     "url": "git://github.com/TimeoutZero/ng-fill-height.git"
   },
   "main": [
-    "builds/release/uiLimitTo.js"
+    "builds/release/ngFillHeight.js"
   ],
   "dependencies": {
     "angular": "1.4.7"
