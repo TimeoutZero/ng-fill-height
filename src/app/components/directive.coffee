@@ -22,6 +22,8 @@ angular.module("ngFillHeight.directives")
           recurrFunc(10) while parentObject.height() >= parentObject.prop('scrollHeight')
 
           recurrFunc(-1) while parentObject.height() < parentObject.prop('scrollHeight')
+
+          return
       }
 
     return {

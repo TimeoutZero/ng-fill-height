@@ -156,18 +156,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    currObject = angular.element(element);
 	    return ngFillHeightOption.api = {
 	      recalcHeight: function() {
-	        var recurrFunc, results;
+	        var recurrFunc;
 	        recurrFunc = function(increment) {
 	          return currObject.height(currObject.height() + increment);
 	        };
 	        while (parentObject.height() >= parentObject.prop('scrollHeight')) {
 	          recurrFunc(10);
 	        }
-	        results = [];
 	        while (parentObject.height() < parentObject.prop('scrollHeight')) {
-	          results.push(recurrFunc(-1));
+	          recurrFunc(-1);
 	        }
-	        return results;
 	      }
 	    };
 	  };
