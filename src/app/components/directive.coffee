@@ -5,6 +5,7 @@ angular.module("ngFillHeight.directives")
 
     ngFillHeightLink = (scope, element, attrs) ->
       ngFillHeightOption = ($parse attrs.ngFillHeight)(scope)
+      ngFillHeightOption.minHeight = ngFillHeightOption.minHeight or 0
 
       if typeof ngFillHeightOption isnt 'object'
         console.error 'The value of ngFillHeight has to be an Object'

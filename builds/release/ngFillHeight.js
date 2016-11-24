@@ -148,6 +148,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  ngFillHeightLink = function(scope, element, attrs) {
 	    var currObject, ngFillHeightOption, parentObject;
 	    ngFillHeightOption = ($parse(attrs.ngFillHeight))(scope);
+	    ngFillHeightOption.minHeight = ngFillHeightOption.minHeight || 0;
 	    if (typeof ngFillHeightOption !== 'object') {
 	      console.error('The value of ngFillHeight has to be an Object');
 	      return;
