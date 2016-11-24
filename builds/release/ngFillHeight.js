@@ -160,10 +160,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        recurrFunc = function(increment) {
 	          return currObject.height(currObject.height() + increment);
 	        };
-	        while (parentObject.height() >= parentObject.prop('scrollHeight')) {
+	        while (currObject.height() < ngFillHeightOption.minHeight || parentObject.height() >= parentObject.prop('scrollHeight')) {
 	          recurrFunc(10);
 	        }
-	        while (parentObject.height() < parentObject.prop('scrollHeight')) {
+	        while (currObject.height() > ngFillHeightOption.minHeight && parentObject.height() < parentObject.prop('scrollHeight')) {
 	          recurrFunc(-1);
 	        }
 	      }
