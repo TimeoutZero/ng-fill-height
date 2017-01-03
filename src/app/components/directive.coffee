@@ -16,15 +16,16 @@ angular.module("ngFillHeight.directives")
 
       ngFillHeightOption.api = {
         recalcHeight : () ->
-          
+
           recurrFunc = (increment) ->
             currObject.height(currObject.height() + increment)
 
-          recurrFunc(10) while currObject.height() < ngFillHeightOption.minHeight or parentObject.height() >= parentObject.prop('scrollHeight')
+          if parentObject.prop('scrollHeight')
+            recurrFunc(10) while currObject.height() < ngFillHeightOption.minHeight or parentObject.height() >= parentObject.prop('scrollHeight')
 
-          recurrFunc(-1) while currObject.height() > ngFillHeightOption.minHeight and parentObject.height() < parentObject.prop('scrollHeight')
+            recurrFunc(-1) while currObject.height() > ngFillHeightOption.minHeight and parentObject.height() < parentObject.prop('scrollHeight')
 
-          return
+          return currObject.height()
       }
 
     return {
