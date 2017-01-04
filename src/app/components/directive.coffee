@@ -4,8 +4,8 @@ angular.module("ngFillHeight.directives")
   .directive 'ngFillHeight', ($parse, $log) ->
 
     ngFillHeightLink = (scope, element, attrs) ->
-      ngFillHeightOption = ($parse attrs.ngFillHeight)(scope)
-      ngFillHeightOption.minHeight = ngFillHeightOption.minHeight or 0
+      ngFillHeightOption                 = scope.ngFillHeight
+      ngFillHeightOption.minHeight       = ngFillHeightOption.minHeight or 0
       ngFillHeightOption.maxCallNumber or= 10000
 
       if typeof ngFillHeightOption isnt 'object'
@@ -36,6 +36,8 @@ angular.module("ngFillHeight.directives")
 
     return {
       restrict: 'A'
-      scope: {}
+      scope: {
+        ngFillHeight: "="
+      }
       link : ngFillHeightLink
     }
