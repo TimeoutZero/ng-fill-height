@@ -143,35 +143,44 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	'use strict';
-	angular.module("ngFillHeight.directives").directive('ngFillHeight', ["$parse", function($parse) {
+	angular.module("ngFillHeight.directives").directive('ngFillHeight', ["$parse", "$log", function($parse, $log) {
 	  var ngFillHeightLink;
 	  ngFillHeightLink = function(scope, element, attrs) {
-	    var currObject, ngFillHeightOption, parentObject;
+	    var currObject, ngFillHeightOption, parentObject, timesCalled;
 	    ngFillHeightOption = ($parse(attrs.ngFillHeight))(scope);
 	    ngFillHeightOption.minHeight = ngFillHeightOption.minHeight || 0;
+	    ngFillHeightOption.maxCallNumber || (ngFillHeightOption.maxCallNumber = 10000);
 	    if (typeof ngFillHeightOption !== 'object') {
 	      console.error('The value of ngFillHeight has to be an Object');
 	      return;
 	    }
 	    parentObject = angular.element(ngFillHeightOption.parentSelector);
 	    currObject = angular.element(element);
+	    timesCalled = 0;
 	    return ngFillHeightOption.api = {
 	      recalcHeight: function() {
 	        var recurrFunc;
 	        recurrFunc = function(increment) {
-	          return currObject.height(currObject.height() + increment);
+	          currObject.height(currObject.height() + increment);
+	          timesCalled++;
 	        };
-	        while (currObject.height() < ngFillHeightOption.minHeight || parentObject.height() >= parentObject.prop('scrollHeight')) {
-	          recurrFunc(10);
+	        if (parentObject.prop('scrollHeight') && timesCalled <= ngFillHeightOption.maxCallNumber) {
+	          while (currObject.height() < ngFillHeightOption.minHeight || parentObject.height() >= parentObject.prop('scrollHeight')) {
+	            recurrFunc(10);
+	          }
+	          while (currObject.height() > ngFillHeightOption.minHeight && parentObject.height() < parentObject.prop('scrollHeight')) {
+	            recurrFunc(-1);
+	          }
+	        } else {
+	          $log.warn("[ng-fill-height] : Maximum number of calls reached (" + ngFillHeightOption.maxCallNumber + ")");
 	        }
-	        while (currObject.height() > ngFillHeightOption.minHeight && parentObject.height() < parentObject.prop('scrollHeight')) {
-	          recurrFunc(-1);
-	        }
+	        return currObject.height();
 	      }
 	    };
 	  };
 	  return {
 	    restrict: 'A',
+	    scope: {},
 	    link: ngFillHeightLink
 	  };
 	}]);
