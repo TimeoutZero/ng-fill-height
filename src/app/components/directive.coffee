@@ -9,7 +9,7 @@ angular.module("ngFillHeight.directives")
       ngFillHeightOption.maxCallNumber or= 10000
 
       if typeof ngFillHeightOption isnt 'object'
-        console.error 'The value of ngFillHeight has to be an Object'
+        $log.error 'The value of ngFillHeight has to be an Object'
         return
 
       parentObject = angular.element(ngFillHeightOption.parentSelector)
