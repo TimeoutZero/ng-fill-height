@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module("ngFillHeight.directives")
-  .directive 'ngFillHeight', ($parse) ->
+  .directive 'ngFillHeight', ($parse, $log) ->
 
     ngFillHeightLink = (scope, element, attrs) ->
       ngFillHeightOption = ($parse attrs.ngFillHeight)(scope)
