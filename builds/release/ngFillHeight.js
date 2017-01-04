@@ -147,11 +147,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var ngFillHeightLink;
 	  ngFillHeightLink = function(scope, element, attrs) {
 	    var currObject, ngFillHeightOption, parentObject, timesCalled;
-	    ngFillHeightOption = ($parse(attrs.ngFillHeight))(scope);
+	    ngFillHeightOption = scope.ngFillHeight;
 	    ngFillHeightOption.minHeight = ngFillHeightOption.minHeight || 0;
 	    ngFillHeightOption.maxCallNumber || (ngFillHeightOption.maxCallNumber = 10000);
 	    if (typeof ngFillHeightOption !== 'object') {
-	      console.error('The value of ngFillHeight has to be an Object');
+	      $log.error('The value of ngFillHeight has to be an Object');
 	      return;
 	    }
 	    parentObject = angular.element(ngFillHeightOption.parentSelector);
@@ -180,7 +180,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	  return {
 	    restrict: 'A',
-	    scope: {},
+	    scope: {
+	      ngFillHeight: "="
+	    },
 	    link: ngFillHeightLink
 	  };
 	}]);
