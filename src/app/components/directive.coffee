@@ -12,12 +12,14 @@ angular.module("ngFillHeight.directives")
         $log.error 'The value of ngFillHeight has to be an Object'
         return
 
-      parentObject = angular.element(ngFillHeightOption.parentSelector)
-      currObject   =  angular.element(element)
+      currObject   =  if angular.isString(ngFillHeightOption.contentSelector) then angular.element(element).find(ngFillHeightOption.contentSelector) else angular.element(element)
+      parentObject =  currObject.closest(ngFillHeightOption.parentSelector)
       timesCalled  = 0
 
       ngFillHeightOption.api =
         recalcHeight : () ->
+          unless parentObject.length then throw new Error("no parent found using #{ngFillHeightOption.parentSelector}")
+          unless currObject.length   then throw new Error("no parent found using #{ngFillHeightOption.selector}")
 
           recurrFunc = (increment) ->
             currObject.height(currObject.height() + increment)
