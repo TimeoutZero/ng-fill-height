@@ -26,6 +26,14 @@ bbComponentOptions.modules = {
 
 var bbAngularOptions = {
   modulesData: {
+    scripts: {
+      coffee: {
+        sourcemaps: {
+          active: false
+        }
+      }
+    },
+
     unitTests: {
       testAutoConfig: {
         suppressCoverage: true
