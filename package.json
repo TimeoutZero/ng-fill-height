@@ -1,9 +1,8 @@
 {
   "name": "ng-fill-height",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Changes height of the element until parent gets a scroll",
-  "dependencies": {
-  },
+  "dependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/TimeoutZero/ng-fill-height.git"
