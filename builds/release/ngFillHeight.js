@@ -79,50 +79,25 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	'use strict';
-
-	// =============================================
-	// Vendors
-	// =============================================
-
 	angular.module("ngFillHeight.vendors", []);
 
-	// =============================================
-	// Modules
-	// =============================================
-	// angular.module("ngFillHeight.controllers" , ["ngFillHeight.vendors"]);
-	// angular.module("ngFillHeight.filters"     , ["ngFillHeight.vendors"]);
-	// angular.module("ngFillHeight.factories"   , ["ngFillHeight.vendors"]);
-	// angular.module("ngFillHeight.constants"   , ["ngFillHeight.vendors"]);
-	// angular.module("ngFillHeight.services"    , ["ngFillHeight.vendors"]);
+	angular.module("ngFillHeight.constants", ["ngFillHeight.vendors"]);
+
 	angular.module("ngFillHeight.directives", ["ngFillHeight.vendors"]);
-	// angular.module("ngFillHeight.mocks"       , ["ngFillHeight.vendors"]);
-	// angular.module("ngFillHeight.configs"     , ["ngFillHeight.vendors"]);
-	// angular.module("ngFillHeight.providers"   , ["ngFillHeight.vendors"]);
 
+	angular.module("ngFillHeight.mocks", ["ngFillHeight.vendors"]);
 
-	// =============================================
-	// Scripts Module
-	// =============================================
-	angular.module("ngFillHeight.scripts", [
-	// "ngFillHeight.controllers",
-	// "ngFillHeight.constants",
-	// "ngFillHeight.filters"
-	// "ngFillHeight.factories",
-	// "ngFillHeight.services",
-	"ngFillHeight.directives"]);
+	angular.module("ngFillHeight.scripts", ["ngFillHeight.constants", "ngFillHeight.directives", "ngFillHeight.mocks"]);
 
-	// =============================================
-	// Main Module
-	// =============================================
 	angular.module("ngFillHeight", ["ngFillHeight.scripts", "ngFillHeight.vendors"]);
+
 
 /***/ },
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./directive.coffee": 4,
-		"./directive.spec.js": 5
+		"./directive.coffee": 4
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -154,12 +129,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	      $log.error('The value of ngFillHeight has to be an Object');
 	      return;
 	    }
-	    parentObject = angular.element(ngFillHeightOption.parentSelector);
-	    currObject = angular.element(element);
+	    currObject = angular.isString(ngFillHeightOption.contentSelector) ? angular.element(element).find(ngFillHeightOption.contentSelector) : angular.element(element);
+	    parentObject = currObject.closest(ngFillHeightOption.parentSelector);
 	    timesCalled = 0;
 	    return ngFillHeightOption.api = {
 	      recalcHeight: function() {
 	        var recurrFunc;
+	        if (!parentObject.length) {
+	          throw new Error("no parent found using " + ngFillHeightOption.parentSelector);
+	        }
+	        if (!currObject.length) {
+	          throw new Error("no parent found using " + ngFillHeightOption.selector);
+	        }
+	        return;
 	        recurrFunc = function(increment) {
 	          currObject.height(currObject.height() + increment);
 	          timesCalled++;
@@ -187,13 +169,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	}]);
 
-
-/***/ },
-/* 5 */
-/***/ function(module, exports) {
-
-	// empty (null-loader)
-	"use strict";
 
 /***/ }
 /******/ ])
