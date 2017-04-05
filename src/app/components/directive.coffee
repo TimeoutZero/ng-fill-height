@@ -20,6 +20,7 @@ angular.module("ngFillHeight.directives")
         recalcHeight : () ->
           unless parentObject.length then throw new Error("no parent found using #{ngFillHeightOption.parentSelector}")
           unless currObject.length   then throw new Error("no parent found using #{ngFillHeightOption.selector}")
+          return  # test version
 
           recurrFunc = (increment) ->
             currObject.height(currObject.height() + increment)
