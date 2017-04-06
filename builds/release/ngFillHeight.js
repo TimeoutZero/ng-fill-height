@@ -121,7 +121,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	angular.module("ngFillHeight.directives").directive('ngFillHeight', ["$parse", "$log", function($parse, $log) {
 	  var ngFillHeightLink;
 	  ngFillHeightLink = function(scope, element, attrs) {
-	    var currObject, ngFillHeightOption, parentObject, timesCalled;
+	    var currObject, ngFillHeightOption, parentObject;
 	    ngFillHeightOption = scope.ngFillHeight;
 	    ngFillHeightOption.minHeight = ngFillHeightOption.minHeight || 0;
 	    ngFillHeightOption.maxCallNumber || (ngFillHeightOption.maxCallNumber = 10000);
@@ -131,32 +131,47 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    currObject = angular.isString(ngFillHeightOption.contentSelector) ? angular.element(element).find(ngFillHeightOption.contentSelector) : angular.element(element);
 	    parentObject = currObject.closest(ngFillHeightOption.parentSelector);
-	    timesCalled = 0;
+
+	    /*
+	     * Private Methods
+	     */
+	    ngFillHeightOption._utils = {
+	      getCssPropertyAsNumber: function(element, propertyName) {
+	        return parseInt(element.css(propertyName), 10) || 0;
+	      },
+	      getMarginAndBorderHeight: function(element, specification) {
+	        var borderProperty, marginProperty;
+	        marginProperty = 'margin';
+	        borderProperty = 'border';
+	        if (specification) {
+	          marginProperty += "-" + specification;
+	          borderProperty += "-" + specification + "-width";
+	        }
+	        marginProperty = ngFillHeightOption._utils.getCssPropertyAsNumber(element, marginProperty);
+	        borderProperty = ngFillHeightOption._utils.getCssPropertyAsNumber(element, borderProperty);
+	        return marginProperty + borderProperty;
+	      }
+	    };
+
+	    /*
+	     * Public API Methods
+	     */
 	    return ngFillHeightOption.api = {
 	      recalcHeight: function() {
-	        var recurrFunc;
+	        var elementBottomMarginAndBorderHeight, elementHeight, elementOffsetTop;
 	        if (!parentObject.length) {
 	          throw new Error("no parent found using " + ngFillHeightOption.parentSelector);
 	        }
 	        if (!currObject.length) {
 	          throw new Error("no parent found using " + ngFillHeightOption.selector);
 	        }
-	        return;
-	        recurrFunc = function(increment) {
-	          currObject.height(currObject.height() + increment);
-	          timesCalled++;
-	        };
-	        if (parentObject.prop('scrollHeight') && timesCalled <= ngFillHeightOption.maxCallNumber) {
-	          while (currObject.height() < ngFillHeightOption.minHeight || parentObject.height() >= parentObject.prop('scrollHeight')) {
-	            recurrFunc(10);
-	          }
-	          while (currObject.height() > ngFillHeightOption.minHeight && parentObject.height() < parentObject.prop('scrollHeight')) {
-	            recurrFunc(-1);
-	          }
-	        } else {
-	          $log.warn("[ng-fill-height] : Maximum number of calls reached (" + ngFillHeightOption.maxCallNumber + ")");
+	        elementOffsetTop = currObject.position().top - parentObject.position().top;
+	        elementBottomMarginAndBorderHeight = ngFillHeightOption._utils.getMarginAndBorderHeight(currObject, 'bottom');
+	        elementHeight = parentObject.innerHeight() - elementOffsetTop - elementBottomMarginAndBorderHeight;
+	        if (ngFillHeightOption.minHeight && elementHeight < ngFillHeightOption.minHeight) {
+	          elementHeight = ngFillHeightOption.minHeight;
 	        }
-	        return currObject.height();
+	        return currObject.height(elementHeight);
 	      }
 	    };
 	  };

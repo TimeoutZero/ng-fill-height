@@ -14,27 +14,45 @@ angular.module("ngFillHeight.directives")
 
       currObject   =  if angular.isString(ngFillHeightOption.contentSelector) then angular.element(element).find(ngFillHeightOption.contentSelector) else angular.element(element)
       parentObject =  currObject.closest(ngFillHeightOption.parentSelector)
-      timesCalled  = 0
 
+      ###
+      # Private Methods
+      ###
+      ngFillHeightOption._utils =
+        getCssPropertyAsNumber: (element, propertyName) ->
+          return parseInt(element.css(propertyName), 10) or 0
+
+        getMarginAndBorderHeight: (element, specification) ->
+          marginProperty = 'margin'
+          borderProperty = 'border'
+
+          if specification
+            marginProperty += "-#{specification}"
+            borderProperty += "-#{specification}-width"
+
+          marginProperty = ngFillHeightOption._utils.getCssPropertyAsNumber(element, marginProperty)
+          borderProperty = ngFillHeightOption._utils.getCssPropertyAsNumber(element, borderProperty)
+
+          return marginProperty + borderProperty
+
+      ###
+      # Public API Methods
+      ###
       ngFillHeightOption.api =
+
         recalcHeight : () ->
           unless parentObject.length then throw new Error("no parent found using #{ngFillHeightOption.parentSelector}")
           unless currObject.length   then throw new Error("no parent found using #{ngFillHeightOption.selector}")
-          # return  # test version
 
-          recurrFunc = (increment) ->
-            currObject.height(currObject.height() + increment)
-            timesCalled++
-            return
+          elementOffsetTop                   = currObject.position().top - parentObject.position().top
+          elementBottomMarginAndBorderHeight = ngFillHeightOption._utils.getMarginAndBorderHeight(currObject ,'bottom')
 
-          if parentObject.prop('scrollHeight') and timesCalled <= ngFillHeightOption.maxCallNumber
-            recurrFunc(10) while currObject.height() < ngFillHeightOption.minHeight or parentObject.height() >= parentObject.prop('scrollHeight')
+          elementHeight = parentObject.innerHeight() - elementOffsetTop - elementBottomMarginAndBorderHeight
 
-            recurrFunc(-1) while currObject.height() > ngFillHeightOption.minHeight and parentObject.height() < parentObject.prop('scrollHeight')
-          else
-            $log.warn("[ng-fill-height] : Maximum number of calls reached (#{ngFillHeightOption.maxCallNumber})")
+          if ngFillHeightOption.minHeight and elementHeight < ngFillHeightOption.minHeight
+            elementHeight = ngFillHeightOption.minHeight
 
-          return currObject.height()
+          return currObject.height(elementHeight)
 
 
     return {
