@@ -72,36 +72,12 @@ describe 'ngFillHeight', ->
             scope.fillHeightOptions.api.recalcHeight()
             expect($content.height()).toEqual mock.biggerWrapperUsingFillHeightItself.wrapperHeight
 
-        ###
-        # grandpa
-        ###
-        describe "which has a grandpa division", ->
-          describe "and the wrapper is bigger than the content", ->
-            beforeEach ->
-              scope.fillHeightOptions = mock.biggerWrapperWhichHasAParent.options
-              scope.$digest()
-
-              $element     = $compile(mock.biggerWrapperWhichHasAParent.template)(scope)
-              body.append($element)
-
-              $content     = $element.find('.content')
-              isolateScope = $content.isolateScope()
-              isolateScope.$digest()
-              return
-
-            afterEach ->
-              $element.remove()
-
-            it "fills the entire wrapper using the content", ->
-              scope.fillHeightOptions.api.recalcHeight()
-              expect($content.height()).toEqual mock.biggerWrapperWhichHasAParent.wrapperHeight
-
-        describe "and the wrapper is shorter than the content, but has a minHeight defined", ->
+        describe "and it has some padding", ->
           beforeEach ->
-            scope.fillHeightOptions = mock.shorterWrapperWhichHasAParentAnd.options
+            scope.fillHeightOptions = mock.biggerWrapperWhichHasPadding.options
             scope.$digest()
 
-            $element     = $compile(mock.shorterWrapperWhichHasAParentAnd.template)(scope)
+            $element     = $compile(mock.biggerWrapperWhichHasPadding.template)(scope)
             body.append($element)
 
             $content     = $element.find('.content')
@@ -114,4 +90,71 @@ describe 'ngFillHeight', ->
 
           it "fills the entire wrapper using the content", ->
             scope.fillHeightOptions.api.recalcHeight()
-            expect($content.height()).toEqual mock.shorterWrapperWhichHasAParentAnd.options.minHeight
+            heightWithoutPadding = mock.biggerWrapperWhichHasPadding.wrapperHeight - (2 *  mock.biggerWrapperWhichHasPadding.padding)
+            expect($content.height()).toEqual heightWithoutPadding
+
+      describe "and it has diferrent values for top padding and bottom padding", ->
+        beforeEach ->
+          scope.fillHeightOptions = mock.biggerWrapperWhichHasPaddingTopAndBottomWithDifferentValues.options
+          scope.$digest()
+
+          $element     = $compile(mock.biggerWrapperWhichHasPaddingTopAndBottomWithDifferentValues.template)(scope)
+          body.append($element)
+
+          $content     = $element.find('.content')
+          isolateScope = $content.isolateScope()
+          isolateScope.$digest()
+          return
+
+        afterEach ->
+          $element.remove()
+
+        it "fills the entire wrapper using the content", ->
+          scope.fillHeightOptions.api.recalcHeight()
+          wrapperPadding       = mock.biggerWrapperWhichHasPaddingTopAndBottomWithDifferentValues.paddingTop + mock.biggerWrapperWhichHasPaddingTopAndBottomWithDifferentValues.paddingBottom
+          heightWithoutPadding = mock.biggerWrapperWhichHasPaddingTopAndBottomWithDifferentValues.wrapperHeight - wrapperPadding
+          expect($content.height()).toEqual heightWithoutPadding
+
+      ###
+      # grandpa
+      ###
+      describe "which has a grandpa division", ->
+        describe "and the wrapper is bigger than the content", ->
+          beforeEach ->
+            scope.fillHeightOptions = mock.biggerWrapperWhichHasAParent.options
+            scope.$digest()
+
+            $element     = $compile(mock.biggerWrapperWhichHasAParent.template)(scope)
+            body.append($element)
+
+            $content     = $element.find('.content')
+            isolateScope = $content.isolateScope()
+            isolateScope.$digest()
+            return
+
+          afterEach ->
+            $element.remove()
+
+          it "fills the entire wrapper using the content", ->
+            scope.fillHeightOptions.api.recalcHeight()
+            expect($content.height()).toEqual mock.biggerWrapperWhichHasAParent.wrapperHeight
+
+      describe "and the wrapper is shorter than the content, but has a minHeight defined", ->
+        beforeEach ->
+          scope.fillHeightOptions = mock.shorterWrapperWhichHasAParentAnd.options
+          scope.$digest()
+
+          $element     = $compile(mock.shorterWrapperWhichHasAParentAnd.template)(scope)
+          body.append($element)
+
+          $content     = $element.find('.content')
+          isolateScope = $content.isolateScope()
+          isolateScope.$digest()
+          return
+
+        afterEach ->
+          $element.remove()
+
+        it "fills the entire wrapper using the content", ->
+          scope.fillHeightOptions.api.recalcHeight()
+          expect($content.height()).toEqual mock.shorterWrapperWhichHasAParentAnd.options.minHeight

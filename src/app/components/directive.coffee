@@ -22,6 +22,16 @@ angular.module("ngFillHeight.directives")
         getCssPropertyAsNumber: (element, propertyName) ->
           return parseInt(element.css(propertyName), 10) or 0
 
+        getPadding: (element, specification) ->
+          paddingProperty = 'padding'
+
+          if specification
+            paddingProperty += "-#{specification}"
+
+          paddingProperty = ngFillHeightOption._utils.getCssPropertyAsNumber(element, paddingProperty)
+
+          return paddingProperty
+
         getMarginAndBorderHeight: (element, specification) ->
           marginProperty = 'margin'
           borderProperty = 'border'
@@ -44,10 +54,13 @@ angular.module("ngFillHeight.directives")
           unless parentObject.length then throw new Error("no parent found using #{ngFillHeightOption.parentSelector}")
           unless currObject.length   then throw new Error("no parent found using #{ngFillHeightOption.selector}")
 
+          wrapperPaddingTop                  = ngFillHeightOption._utils.getPadding(parentObject, 'top')
+          wrapperPaddingBottom               = ngFillHeightOption._utils.getPadding(parentObject, 'bottom')
           elementOffsetTop                   = currObject.position().top - parentObject.position().top
           elementBottomMarginAndBorderHeight = ngFillHeightOption._utils.getMarginAndBorderHeight(currObject ,'bottom')
 
-          elementHeight = parentObject.innerHeight() - elementOffsetTop - elementBottomMarginAndBorderHeight
+          parentHeight  = parentObject.innerHeight() - ( wrapperPaddingTop + wrapperPaddingBottom )
+          elementHeight = parentHeight - elementOffsetTop - elementBottomMarginAndBorderHeight - wrapperPaddingBottom
 
           if ngFillHeightOption.minHeight and elementHeight < ngFillHeightOption.minHeight
             elementHeight = ngFillHeightOption.minHeight
