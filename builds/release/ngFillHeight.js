@@ -139,6 +139,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	      getCssPropertyAsNumber: function(element, propertyName) {
 	        return parseInt(element.css(propertyName), 10) || 0;
 	      },
+	      getPadding: function(element, specification) {
+	        var paddingProperty;
+	        paddingProperty = 'padding';
+	        if (specification) {
+	          paddingProperty += "-" + specification;
+	        }
+	        paddingProperty = ngFillHeightOption._utils.getCssPropertyAsNumber(element, paddingProperty);
+	        return paddingProperty;
+	      },
 	      getMarginAndBorderHeight: function(element, specification) {
 	        var borderProperty, marginProperty;
 	        marginProperty = 'margin';
@@ -158,16 +167,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	    return ngFillHeightOption.api = {
 	      recalcHeight: function() {
-	        var elementBottomMarginAndBorderHeight, elementHeight, elementOffsetTop;
+	        var elementBottomMarginAndBorderHeight, elementHeight, elementOffsetTop, parentHeight, wrapperPaddingBottom, wrapperPaddingTop;
 	        if (!parentObject.length) {
 	          throw new Error("no parent found using " + ngFillHeightOption.parentSelector);
 	        }
 	        if (!currObject.length) {
 	          throw new Error("no parent found using " + ngFillHeightOption.selector);
 	        }
+	        wrapperPaddingTop = ngFillHeightOption._utils.getPadding(parentObject, 'top');
+	        wrapperPaddingBottom = ngFillHeightOption._utils.getPadding(parentObject, 'bottom');
 	        elementOffsetTop = currObject.position().top - parentObject.position().top;
 	        elementBottomMarginAndBorderHeight = ngFillHeightOption._utils.getMarginAndBorderHeight(currObject, 'bottom');
-	        elementHeight = parentObject.innerHeight() - elementOffsetTop - elementBottomMarginAndBorderHeight;
+	        parentHeight = parentObject.innerHeight() - (wrapperPaddingTop + wrapperPaddingBottom);
+	        elementHeight = parentHeight - elementOffsetTop - elementBottomMarginAndBorderHeight - wrapperPaddingBottom;
 	        if (ngFillHeightOption.minHeight && elementHeight < ngFillHeightOption.minHeight) {
 	          elementHeight = ngFillHeightOption.minHeight;
 	        }
